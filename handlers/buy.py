@@ -24,8 +24,8 @@ async def start_buy(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ASK_TEAM
 
 async def receive_team(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    team_name = update.message.text
-    team_data = teams_collection.find_one({"team": team_name})
+    team_name = update.message.text.strip().lower()
+    team_data = teams_collection.find_one({"team": {"$regex": f"^{team_name}$", "$options": "i"}})
 
     if team_data:
         user = update.message.from_user
@@ -120,7 +120,7 @@ async def receive_team(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             await update.message.reply_text('Transaction Failed: You do not have enough balance to buy a share of this team.')
     else:
-        await update.message.reply_text('Error: The team you mentioned does not exist. Please try again.')
+        await update.message.reply_text('Error: The team you mentioned does not exist. Please check the team name and try again.')
         return ASK_TEAM
 
     return ConversationHandler.END
