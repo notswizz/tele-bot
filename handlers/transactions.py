@@ -19,7 +19,7 @@ async def transactions(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Retrieve the last 15 transactions
     recent_transactions = transactions_collection.find().sort("timestamp", -1).limit(15)
     response = "📋 **Transaction History:**\n\n"
-    response += "| **Username** | **Type** | **Team** | **Price** | **Timestamp** |\n"
+    response += "| **Username** | Type | **Team** | **Price** | **Timestamp** |\n"
     response += "|--------------|----------|----------|-----------|----------------|\n"
 
     usernames = []
