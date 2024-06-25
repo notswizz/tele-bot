@@ -43,10 +43,10 @@ async def receive_team(update: Update, context: ContextTypes.DEFAULT_TYPE):
         yaxis_title='Price',
         plot_bgcolor='rgba(0,0,0,0)',
         paper_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='white'),
-        title_font=dict(size=24, color='white'),
-        xaxis=dict(showgrid=False, color='white'),
-        yaxis=dict(showgrid=False, color='white')
+        font=dict(color='black'),
+        title_font=dict(size=24, color='black'),
+        xaxis=dict(showgrid=True, gridcolor='lightgrey', color='black'),
+        yaxis=dict(showgrid=True, gridcolor='lightgrey', color='black')
     )
 
     # Add team logo if available
