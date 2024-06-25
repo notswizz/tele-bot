@@ -22,7 +22,7 @@ async def claim(update: Update, context: ContextTypes.DEFAULT_TYPE):
     username = user.username
 
     if not username:
-        await update.message.reply_text("You don't have a username set in Telegram. Please set a username to use this command.")
+        await update.message.reply_text("You do not have a username set in Telegram. Please set a username to use this command.")
         return
 
     # Check if the user has already claimed today
