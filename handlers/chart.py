@@ -39,10 +39,18 @@ async def receive_team(update: Update, context: ContextTypes.DEFAULT_TYPE):
     fig.update_layout(title=f'Price Chart for {team_name}', xaxis_title='Transaction Number', yaxis_title='Price')
 
     # Convert the figure to a PNG image
-    image_bytes = fig.to_image(format='png')
+    try:
+        image_bytes = fig.to_image(format='png')
+    except Exception as e:
+        await update.message.reply_text(f'❌ Error generating chart: {e}')
+        return ConversationHandler.END
 
     # Send the image
-    await update.message.reply_photo(photo=image_bytes)
+    try:
+        await update.message.reply_photo(photo=image_bytes)
+    except Exception as e:
+        await update.message.reply_text(f'❌ Error sending chart: {e}')
+        return ConversationHandler.END
 
     return ConversationHandler.END
 
@@ -58,3 +66,4 @@ chart_conversation = ConversationHandler(
     },
     fallbacks=[CommandHandler('cancel', cancel)]
 )
+
