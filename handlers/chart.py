@@ -31,9 +31,18 @@ async def receive_team(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return ASK_TEAM
 
     prices = []
+    buy_prices = []
+    sell_prices = []
 
     for transaction in team_transactions_list:
         prices.append(transaction['price'])
+        if transaction['type'] == 'buy':
+            buy_prices.append(transaction['price'])
+        elif transaction['type'] == 'sell':
+            sell_prices.append(transaction['price'])
+
+    avg_buy_price = sum(buy_prices) / len(buy_prices) if buy_prices else 0
+    avg_sell_price = sum(sell_prices) / len(sell_prices) if sell_prices else 0
 
     # Generate chart with transaction numbers on the x-axis
     fig = go.Figure(data=[go.Scatter(x=list(range(1, len(prices) + 1)), y=prices, mode='lines+markers', marker=dict(size=10, color='blue'))])
@@ -47,6 +56,29 @@ async def receive_team(update: Update, context: ContextTypes.DEFAULT_TYPE):
         title_font=dict(size=24, color='black'),
         xaxis=dict(showgrid=True, gridcolor='lightgrey', color='black'),
         yaxis=dict(showgrid=True, gridcolor='lightgrey', color='black')
+    )
+
+    # Add average buy and sell price annotations
+    fig.add_annotation(
+        x=len(prices) / 2,
+        y=max(prices),
+        text=f"Avg Buy Price: ${avg_buy_price:.2f}",
+        showarrow=False,
+        font=dict(size=12, color="green"),
+        align="center",
+        bgcolor="white",
+        opacity=0.8
+    )
+
+    fig.add_annotation(
+        x=len(prices) / 2,
+        y=max(prices) - (max(prices) - min(prices)) * 0.1,
+        text=f"Avg Sell Price: ${avg_sell_price:.2f}",
+        showarrow=False,
+        font=dict(size=12, color="red"),
+        align="center",
+        bgcolor="white",
+        opacity=0.8
     )
 
     # Add team logo if available
