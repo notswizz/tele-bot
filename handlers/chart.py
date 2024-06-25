@@ -43,6 +43,7 @@ async def receive_team(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     avg_buy_price = sum(buy_prices) / len(buy_prices) if buy_prices else 0
     avg_sell_price = sum(sell_prices) / len(sell_prices) if sell_prices else 0
+    current_price = prices[-1] if prices else 0
 
     # Generate chart with transaction numbers on the x-axis
     fig = go.Figure(data=[go.Scatter(x=list(range(1, len(prices) + 1)), y=prices, mode='lines+markers', marker=dict(size=10, color='blue'))])
@@ -61,7 +62,7 @@ async def receive_team(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Add average buy and sell price annotations
     fig.add_annotation(
         x=len(prices) / 2,
-        y=max(prices),
+        y=max(prices) + (max(prices) - min(prices)) * 0.1,
         text=f"Avg Buy Price: ${avg_buy_price:.2f}",
         showarrow=False,
         font=dict(size=12, color="green"),
@@ -72,10 +73,23 @@ async def receive_team(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     fig.add_annotation(
         x=len(prices) / 2,
-        y=max(prices) - (max(prices) - min(prices)) * 0.1,
+        y=max(prices),
         text=f"Avg Sell Price: ${avg_sell_price:.2f}",
         showarrow=False,
         font=dict(size=12, color="red"),
+        align="center",
+        bgcolor="white",
+        opacity=0.8
+    )
+
+    # Add current price annotation
+    fig.add_annotation(
+        x=len(prices),
+        y=current_price,
+        text=f"Current Price: ${current_price:.2f}",
+        showarrow=True,
+        arrowhead=2,
+        font=dict(size=14, color="blue", family="Arial Black"),
         align="center",
         bgcolor="white",
         opacity=0.8
