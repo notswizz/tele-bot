@@ -4,6 +4,7 @@ from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, MessageHandler, filters
 from pymongo import MongoClient
 import io
+from PIL import Image
 
 # Access the MongoDB URI from the environment variables
 MONGODB_URI = os.getenv('MONGODB_URI', 'your_mongodb_connection_string')
@@ -35,8 +36,32 @@ async def receive_team(update: Update, context: ContextTypes.DEFAULT_TYPE):
         prices.append(transaction['price'])
 
     # Generate chart with transaction numbers on the x-axis
-    fig = go.Figure(data=[go.Scatter(x=list(range(1, len(prices) + 1)), y=prices, mode='lines+markers')])
-    fig.update_layout(title=f'Price Chart for {team_name}', xaxis_title='Transaction Number', yaxis_title='Price')
+    fig = go.Figure(data=[go.Scatter(x=list(range(1, len(prices) + 1)), y=prices, mode='lines+markers', marker=dict(size=10, color='blue'))])
+    fig.update_layout(
+        title=f'Price Chart for {team_name}',
+        xaxis_title='Transaction Number',
+        yaxis_title='Price',
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(color='white'),
+        title_font=dict(size=24, color='white'),
+        xaxis=dict(showgrid=False, color='white'),
+        yaxis=dict(showgrid=False, color='white')
+    )
+
+    # Add team logo if available
+    logo_path = f'logos/{team_name}.png'
+    if os.path.exists(logo_path):
+        logo = Image.open(logo_path)
+        fig.add_layout_image(
+            dict(
+                source=logo,
+                xref="paper", yref="paper",
+                x=1, y=1,
+                sizex=0.2, sizey=0.2,
+                xanchor="right", yanchor="bottom"
+            )
+        )
 
     # Convert the figure to a PNG image
     try:
@@ -66,4 +91,3 @@ chart_conversation = ConversationHandler(
     },
     fallbacks=[CommandHandler('cancel', cancel)]
 )
-
