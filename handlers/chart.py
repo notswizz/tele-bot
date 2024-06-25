@@ -104,7 +104,7 @@ async def receive_team(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 source=logo,
                 xref="paper", yref="paper",
                 x=1, y=1,
-                sizex=0.4, sizey=0.4,
+                sizex=0.3, sizey=0.3,
                 xanchor="right", yanchor="bottom"
             )
         )

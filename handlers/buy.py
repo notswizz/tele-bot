@@ -45,21 +45,21 @@ async def receive_team(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             # Update the team data in the database
             teams_collection.update_one(
-                {"team": team_name},
+                {"team": team_data['team']},  # Use the exact team name from the database
                 {"$set": {"price": new_price, "shares": new_shares}}
             )
 
             # Increment the team's share count for the user
             users_collection.update_one(
                 {"username": user.username},
-                {"$inc": {f"teams.{team_name}": 1}}
+                {"$inc": {f"teams.{team_data['team']}": 1}}
             )
 
             # Log the transaction
             transaction_id = transactions_collection.insert_one({
                 "username": user.username,
                 "type": "buy",
-                "team": team_name,
+                "team": team_data['team'],
                 "price": team_data['price'],
                 "timestamp": datetime.now()
             }).inserted_id
@@ -93,7 +93,7 @@ async def receive_team(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 f"Transaction ID: {transaction_id}\n"
                 f"Username: {user.username}\n"
                 f"Type: Buy\n"
-                f"Team: {team_name}\n"
+                f"Team: {team_data['team']}\n"
                 f"Shares Bought: 1\n"
                 f"Price: ${team_data['price']}\n"
                 f"New Price: ${new_price}\n"
