@@ -66,7 +66,7 @@ async def receive_team(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text=f"Avg Buy Price: ${avg_buy_price:.2f}",
         showarrow=False,
         font=dict(size=12, color="green"),
-        align="center",
+        align="left",
         bgcolor="white",
         opacity=0.8
     )
@@ -77,7 +77,7 @@ async def receive_team(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text=f"Avg Sell Price: ${avg_sell_price:.2f}",
         showarrow=False,
         font=dict(size=12, color="red"),
-        align="center",
+        align="left",
         bgcolor="white",
         opacity=0.8
     )
@@ -104,7 +104,7 @@ async def receive_team(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 source=logo,
                 xref="paper", yref="paper",
                 x=1, y=1,
-                sizex=0.2, sizey=0.2,
+                sizex=0.4, sizey=0.4,
                 xanchor="right", yanchor="bottom"
             )
         )
